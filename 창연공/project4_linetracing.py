@@ -11,63 +11,105 @@ from go_any import *
 
 pwm_setup()
 
+
+def getSensor():
+    sensor = [GPIO.input(leftmostled), GPIO.input(leftlessled), GPIO.input(centerled), GPIO.input(rightlessled),
+                    GPIO.input(rightmostled)]
+    return sensor
+
+
 try:
     while True:
-        GPIOList = [GPIO.input(leftmostled), GPIO.input(leftlessled), GPIO.input(centerled), GPIO.input(rightlessled),
-                    GPIO.input(rightmostled)]
+        GPIOList = getSensor()
         print(GPIOList)
 
         #직진의 경우
-        if GPIOList == [1,1,0,1,1]:
-            go_forward_any(30)
-        elif GPIOList == [1,0,0,1,1]:
-            CurveTurn(33, 35, 0.00001)
-            print('go left')
-        elif GPIOList == [1,1,0,0,1]:
-            CurveTurn(35, 33, 0.00001)
-            print('go right')
+        if GPIOList == [1,1,0,1,1] or GPIOList == [1,0,0,0,1] or GPIOList == [0,1,0,0,1]:
+            CurveTurn_any(20,20)
+            print('straight')
+        elif GPIOList == [0,0,0,0,1]:
+            CurveTurn_any(20,22)
+        elif GPIOList == [1,0,0,1,1] or GPIOList == [1,0,1,1,1]:
+                #or GPIOList == [0,0,0,0,1]:
+            CurveTurn_any(20,25)
+            print('straignt and left')
+
+        #elif GPIOList == [0,1,1,1,1]:
+            #CurveTurn_any(20,28)
+
+        # elif GPIOList == [0,0,1,1,1]:
+        #     CurveTurn_any(20, 25)
+
+        elif GPIOList == [1,1,0,0,1]  or GPIOList == [1,1,1,0,1]:
+            CurveTurn_any(24,20)
+            print('straight and right')
+
+        elif GPIOList == [1,1,1,1,0]:
+            CurveTurn_any(30,20)
+        elif GPIOList == [0,1,1,1,1]:
+            CurveTurn_any(20,30)
 
         #오른쪽 교차로시 앞으로 전진 후 턴 or T자 교차로 시 우회전
-        elif GPIOList == [1,1,0,0,0] or [1,1,1,1,1]:
-            stop()
-            sleep(1)
-            while GPIO.input(rightmostled) == 0:
-                go_forward_any(30)
-            stop()
-            sleep(1)
-            while GPIO.input(leftmostled) != 1 and GPIO.input(rightmostled) != 1 and GPIO.input(centerled) != 0: # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
-                rightPointTurn(30,0.000000001) #라이트턴
-            stop()
-            sleep(1)
-            continue
+        #elif GPIOList == [1,1,1,1,0] or GPIOList == [1,1,1,0,0] or GPIOList == [1,1,0,0,0] \
+                #or GPIOList == [1,0,0,0,0] or GPIOList == [0,0,0,0,0] or GPIOList == [0,1,0,0,0]:
+        elif GPIO.input(rightmostled) == 0:
 
-        #유턴, 오른쪽 90도 교차로 or 오른쪽 길이 없으면 좌회전
-        elif GPIOList == [1,1,1,1,1]:
             stop()
             sleep(1)
-            while GPIO.input(leftmostled) != 1 and GPIO.input(rightmostled) != 1 and GPIO.input(centerled) != 0: # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
-                rightPointTurn(30,0.000000001) #라이트턴
+            print('오른쪽 교차로시 앞으로 전진 후 턴 or T자 교차로 시 우회전')
+            # while GPIO.input(rightmostled) == 0:
+            #     CurveTurn_any(20,20)
+            #     sleep(0.5)
+            CurveTurn(20,20,0.5)
+            stop()
+            sleep(1)
+            print('약간 전진후 스톱 그리고 라이트턴')
+            rightPointTurn(25,0.3)
+            print('0.5')
+            while GPIO.input(centerled) != 0: # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
+                rightPointTurn(34,0.1) #라이트턴
+                print('right 1')
+
             stop()
             sleep(1)
             continue
 
         #좌회전
-        elif GPIO.input(leftmostled) == 0 and GPIO.input(rightmostled) == 1:
+        elif  GPIOList == [0,0,0,0,1] or GPIOList == [0,0,0,1,1] or GPIOList == [0,0,1,1,1]:
             stop()
             sleep(1)
-            while GPIO.input(leftmostled) == 0:
-                go_forward_any(30)
+            print('좌회전')
+            # while GPIO.input(leftmostled) == 0:
+            #     CurveTurn_any(20,20)
+            CurveTurn(20,20,0.4)
             stop()
             sleep(1)
             #직진을 했을 시 a가 0일시 계속 직진
             if GPIO.input(centerled) == 0:
+                print('left code out')
                 continue
             else:
-                while GPIO.input(leftmostled) != 1 and GPIO.input(rightmostled) != 1 and GPIO.input(centerled) != 0:  # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
-                    leftPointTurn(30, 0.000000001)  #leftturn
+                while GPIO.input(centerled) != 0:  # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
+                    leftPointTurn(15, 0.1)
+                    print('left1')#leftturn
                 stop()
                 sleep(1)
                 continue
+
+        #유턴, 오른쪽 90도 교차로 or 오른쪽 길이 없으면 좌회전
+        elif GPIOList == [1,1,1,1,1]:
+            stop()
+            sleep(1)
+            print('유턴, 오른쪽 90도 교차로 or 오른쪽 길이 없으면 좌회전')
+            while GPIO.input(centerled) != 0:
+                rightPointTurn(35, 0.1)#라이트턴
+                print('uturn')
+            stop()
+            sleep(1)
+            continue
+
+
+        sleep(0.1)
         #T자 교차로시
         # elif GPIOList [0,0,0,0,0]:
         #     stop()
@@ -87,12 +129,12 @@ try:
         #         continue
 
 
-
-
-
-
-
-
 except KeyboardInterrupt:
     pwm_low()
+
+
+
+
+
+
 

@@ -74,7 +74,7 @@ def leftmotor(x):
 		GPIO.output(MotorLeft_A, GPIO.LOW)
 		GPIO.output(MotorLeft_B, GPIO.HIGH)
 	else:
-		print 'Config Error'
+		print ('Config Error')
 
 def rightmotor(x):
 	if x == True:
@@ -135,7 +135,7 @@ def rightSwingTurn(speed, running_time):
     # set the speed of the left motor to go fowrard
     LeftPwm.ChangeDutyCycle(speed)
     # set the speed of the right motor to stop
-    RightPwm.ChangeDutyCycle(0)
+    RightPwm.ChangeDutyCycle(-17.8)
     # set the running time of the left motor to go fowrard
     time.sleep(running_time)
 
@@ -158,7 +158,7 @@ def leftSwingTurn(speed, running_time):
     # set the speed of the left motor to stop
     LeftPwm.ChangeDutyCycle(0)
     # set the speed of the right motor to go fowrard
-    RightPwm.ChangeDutyCycle(speed)
+    RightPwm.ChangeDutyCycle(speed+17.8)
     # set the running time of the right motor to go fowrard
     time.sleep(running_time)
 
@@ -176,7 +176,7 @@ def rightPointTurn(speed, running_time):  # student assignment (1)
     GPIO.output(MotorRight_PWM,GPIO.HIGH)
 
     LeftPwm.ChangeDutyCycle(speed)
-    RightPwm.ChangeDutyCycle(speed)
+    RightPwm.ChangeDutyCycle(speed+17.8)
 
     time.sleep(running_time)
 
@@ -193,16 +193,26 @@ def leftPointTurn(speed, running_time):  # student assignment (2)
     GPIO.output(MotorRight_PWM,GPIO.HIGH)
 
     LeftPwm.ChangeDutyCycle(speed)
-    RightPwm.ChangeDutyCycle(speed)
+    RightPwm.ChangeDutyCycle(speed+17.8)
 
     time.sleep(running_time)
 
-def CurveTurn(lspeed, rspeed):
-    leftmotor(forward1)
+def CurveTurn(lspeed, rspeed, runtime):
+    leftmotor(forward0)
     GPIO.output(MotorLeft_PWM,GPIO.HIGH)
-    rightmotor(forward1)
+    rightmotor(forward0)
     GPIO.output(MotorRight_PWM,GPIO.HIGH)
     LeftPwm.ChangeDutyCycle(lspeed)
-    RightPwm.ChangeDutyCycle(rspeed)
+    RightPwm.ChangeDutyCycle(rspeed * 1.30)
+    time.sleep(runtime)
+
+def CurveTurn_any(lspeed, rspeed):
+    leftmotor(forward0)
+    GPIO.output(MotorLeft_PWM,GPIO.HIGH)
+    rightmotor(forward0)
+    GPIO.output(MotorRight_PWM,GPIO.HIGH)
+    LeftPwm.ChangeDutyCycle(lspeed)
+    RightPwm.ChangeDutyCycle(rspeed * 1.30)
+
 
 

@@ -133,12 +133,12 @@ RightPwm = GPIO.PWM(MotorRight_PWM, 100)
 # =======================================================================
 
 def go_forward_any(speed):
-    leftmotor(forward0)
+    leftmotor(forward1)
     GPIO.output(MotorLeft_PWM,GPIO.HIGH)
-    rightmotor(forward0)
+    rightmotor(forward1)
     GPIO.output(MotorRight_PWM,GPIO.HIGH)
     LeftPwm.ChangeDutyCycle(speed)
-    RightPwm.ChangeDutyCycle(speed)    
+    RightPwm.ChangeDutyCycle(speed+17.8)    
 
 # student assignment (4)
 
@@ -164,12 +164,12 @@ def go_backward_any(speed):
 # =======================================================================
 
 def go_forward(speed, running_time):
-    leftmotor(forward0)
+    leftmotor(forward1)
     GPIO.output(MotorLeft_PWM,GPIO.HIGH)
-    rightmotor(forward0)
+    rightmotor(forward1)
     GPIO.output(MotorRight_PWM,GPIO.HIGH)
     LeftPwm.ChangeDutyCycle(speed)
-    RightPwm.ChangeDutyCycle(speed)
+    RightPwm.ChangeDutyCycle(speed+17.8)
     sleep(running_time)
 
 # student assignment (6)

@@ -46,9 +46,9 @@ try:
             print('straight and right')
 
         elif GPIOList == [1,1,1,1,0]:
-            leftPointTurn(15,0.1)
+            rightPointTurn(15,0.1) # 도는방향바낌
         elif GPIOList == [0,1,1,1,1]:
-            rightPointTurn(15,0.1)
+            leftPointTurn(15,0.1)
 
         # 좌회전
         elif GPIOList == [0, 0, 0, 0, 1] or GPIOList == [0, 0, 0, 1, 1] or GPIOList == [0, 0, 1, 1, 1]:

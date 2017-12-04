@@ -1,4 +1,4 @@
-#file name: project4_linetracing.py
+#file name: project5_linetracing.py
 import RPi.GPIO as GPIO
 from time import sleep
 
@@ -10,6 +10,7 @@ from trackingModule import *
 from go_any import *
 
 pwm_setup()
+
 
 
 def getSensor():
@@ -41,60 +42,69 @@ try:
         #     CurveTurn_any(20, 25)
 
         elif GPIOList == [1,1,0,0,1]  or GPIOList == [1,1,1,0,1]:
-            CurveTurn_any(24,20)
+            CurveTurn_any(25,20)
             print('straight and right')
 
         elif GPIOList == [1,1,1,1,0]:
-            CurveTurn_any(30,20)
+            leftPointTurn(15,0.1)
         elif GPIOList == [0,1,1,1,1]:
-            CurveTurn_any(20,30)
+            rightPointTurn(15,0.1)
 
-        #오른쪽 교차로시 앞으로 전진 후 턴 or T자 교차로 시 우회전
-        #elif GPIOList == [1,1,1,1,0] or GPIOList == [1,1,1,0,0] or GPIOList == [1,1,0,0,0] \
-                #or GPIOList == [1,0,0,0,0] or GPIOList == [0,0,0,0,0] or GPIOList == [0,1,0,0,0]:
-        elif GPIO.input(rightmostled) == 0:
-
+        # 좌회전
+        elif GPIOList == [0, 0, 0, 0, 1] or GPIOList == [0, 0, 0, 1, 1] or GPIOList == [0, 0, 1, 1, 1]:
             stop()
-            sleep(1)
-            print('오른쪽 교차로시 앞으로 전진 후 턴 or T자 교차로 시 우회전')
-            # while GPIO.input(rightmostled) == 0:
-            #     CurveTurn_any(20,20)
-            #     sleep(0.5)
-            CurveTurn(20,20,0.5)
-            stop()
-            sleep(1)
-            print('약간 전진후 스톱 그리고 라이트턴')
-            rightPointTurn(25,0.3)
-            print('0.5')
-            while GPIO.input(centerled) != 0: # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
-                rightPointTurn(34,0.1) #라이트턴
-                print('right 1')
-
-            stop()
-            sleep(1)
-            continue
-
-        #좌회전
-        elif  GPIOList == [0,0,0,0,1] or GPIOList == [0,0,0,1,1] or GPIOList == [0,0,1,1,1]:
-            stop()
-            sleep(1)
+            sleep(0.1)
             print('좌회전')
             # while GPIO.input(leftmostled) == 0:
             #     CurveTurn_any(20,20)
-            CurveTurn(20,20,0.4)
+            CurveTurn(20, 20, 0.4)
             stop()
-            sleep(1)
-            #직진을 했을 시 a가 0일시 계속 직진
+            sleep(0.5)
+            # 직진을 했을 시 a가 0일시 계속 직진
             if GPIO.input(centerled) == 0:
                 print('left code out')
                 continue
             else:
                 while GPIO.input(centerled) != 0:  # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
                     leftPointTurn(15, 0.1)
-                    print('left1')#leftturn
+                    print('left1')  # leftturn
                 stop()
-                sleep(1)
+                sleep(0.5)
+                list1 = getSensor()
+                print(list1)
+                while GPIO.input(leftmostled) != 0:
+                    leftPointTurn(20, 0.1)
+                    print('라인 잘 탈때까지 좌회전')
                 continue
+
+        #오른쪽 교차로시 앞으로 전진 후 턴 or T자 교차로 시 우회전
+        #elif GPIOList == [1,1,1,1,0] or GPIOList == [1,1,1,0,0] or GPIOList == [1,1,0,0,0] \
+                #or GPIOList == [1,0,0,0,0] or GPIOList == [0,0,0,0,0] or GPIOList == [0,1,0,0,0]:
+        elif GPIO.input(rightmostled) == 0:
+            stop()
+            sleep(0.1)
+            print('오른쪽 교차로시 앞으로 전진 후 턴 or T자 교차로 시 우회전')
+            # while GPIO.input(rightmostled) == 0:
+            #     CurveTurn_any(20,20)
+            #     sleep(0.5)
+            while GPIO.input(rightmostled) != 0:
+                CurveTurn(20,20,0.1)
+            stop()
+            sleep(0.1)
+            if GPIO.input(centerled) == 0:
+                print('right code out')
+                continue
+            else:
+                print('약간 전진후 스톱 그리고 라이트턴')
+                rightPointTurn(20,0.4)
+                print('0.5')
+                while GPIO.input(centerled) != 0: # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
+                    rightPointTurn(20,0.1) #라이트턴
+                    print('right 1')
+                continue
+
+
+
 
         #유턴, 오른쪽 90도 교차로 or 오른쪽 길이 없으면 좌회전
         elif GPIOList == [1,1,1,1,1]:
@@ -109,7 +119,7 @@ try:
             continue
 
 
-        sleep(0.1)
+        sleep(0.05)
         #T자 교차로시
         # elif GPIOList [0,0,0,0,0]:
         #     stop()

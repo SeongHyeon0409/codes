@@ -23,7 +23,6 @@ try:
     while True:
         GPIOList = getSensor()
         print(GPIOList)
-        CurveTurn(30,30,0.1)
 
         #직진의 경우
         if GPIOList == [1,1,0,1,1] or GPIOList == [1,0,0,0,1] or GPIOList == [0,1,0,0,1]:
@@ -71,7 +70,9 @@ try:
                 continue
             else:
                 while GPIO.input(centerled) != 0:  # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
-                    leftPointTurn(35, 0.0001)
+                    leftPointTurn(35, 0.1)
+                    stop()
+                    sleep(0.2)
                     print('left1')  # leftturn
                 stop()
                 sleep(0.5)
@@ -103,10 +104,13 @@ try:
             # else:
 
             print('약간 전진후 스톱 그리고 라이트턴')
-            rightPointTurn(50,0.4)
+            rightPointTurn(38,0.25)
             print('0.5')
             while GPIO.input(centerled) != 0: # 직진라인에 딱 안착할때까지 우측으로 포인트 턴
-                rightPointTurn(50,0.0001) #라이트턴
+                rightPointTurn(40,0.1)
+                stop()
+                sleep(0.15)
+                #라이트턴
                 print('right 1')
             while GPIO.input(centerled) != 0:
                 leftPointTurn(25, 0.0001)
@@ -122,7 +126,10 @@ try:
             print('유턴, 오른쪽 90도 교차로 or 오른쪽 길이 없으면 좌회전')
             CurveTurn(30,30,0.5)
             while GPIO.input(centerled) != 0:
-                PointTurn(50, 0.0001)#라이트턴
+                PointTurn(45, 0.1)
+                stop()
+                sleep(0.1)
+                #라이트턴
                 print('uturn')
             while GPIO.input(centerled) != 0:
                 leftPointTurn(25, 0.0001)

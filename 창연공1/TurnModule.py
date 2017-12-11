@@ -179,7 +179,7 @@ def rightPointTurn(speed, running_time):  # student assignment (1)
 
 
     LeftPwm.ChangeDutyCycle(speed)
-    RightPwm.ChangeDutyCycle(0)#speed * 1.30)
+    RightPwm.ChangeDutyCycle(speed * 1.30)
 
     time.sleep(running_time)
 
@@ -202,7 +202,7 @@ def leftPointTurn(speed, running_time):  # student assignment (2)
     rightmotor(forward0)
 
 
-    LeftPwm.ChangeDutyCycle(0)
+    LeftPwm.ChangeDutyCycle(speed)
     RightPwm.ChangeDutyCycle(speed * 1.30)
 
     time.sleep(running_time)

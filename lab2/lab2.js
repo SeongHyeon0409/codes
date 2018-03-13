@@ -13,7 +13,6 @@ greeting(myBirth3);
 greeting(myBirth4);
 
 function greeting(myBirth) {
-
   splitBirth = myBirth.split(' ')
   console.log("---")
   console.log("내생일은 " +  myBirth + " 입니다.");
@@ -44,9 +43,14 @@ m2 = "타이머를 정지합니다."
 m3 = "x(=1,2,3,...,10)의 세제곱값을 1초 단위로 출력합니다.";
 
 function math(msg, msg2, callback, callback2) {
-
+  let id = setInterval(function () {
+    callback(msg);
+  }, 1000);
+  setTimeout(function () {
+    // 타이머를 제거합니다.
+    callback2(id, msg2)
+  }, 10500);
     // (lab2-2) 구현위치
-
 }
 
 function start(msg) {
@@ -55,20 +59,28 @@ function start(msg) {
     console.log(x * x);
 }
 
-function clear(t) {
+function clear(t,epilog) {
     clearInterval(t);
     console.log(epilog);
+    x = 0;
 }
+
 
 // x(=1,2,3,...,10)의 제곱값을 1초 단위로 출력
 math(m, m2, start, clear);
 
 // x(=1,2,3,...,10)의 세제곱값을 1초 단위로 출력
+
 setTimeout(
   function(){
-
+    math(m3, m2, start2, clear);
       // (lab2-2) 구현위치
       //   math()를 호출하되 3번인수에 start() 내용을 수정하여
       //   3승을 계산하는 익명함수 형태로 작성, 호출할 것.
-
   }, 12000);
+
+function start2(msg) {
+    if(x==0) {console.log(""); console.log("-----"); console.log(msg);}
+    x += 1;
+    console.log(x * x * x);
+}

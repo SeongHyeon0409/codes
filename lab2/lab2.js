@@ -73,14 +73,11 @@ math(m, m2, start, clear);
 
 setTimeout(
   function(){
-    math(m3, m2, start2, clear);
+    math(m3, m2, function(msg){
+        if(x==0) {console.log(""); console.log("-----"); console.log(msg);}
+        x += 1;
+        console.log(x * x * x);}, clear);
       // (lab2-2) 구현위치
       //   math()를 호출하되 3번인수에 start() 내용을 수정하여
       //   3승을 계산하는 익명함수 형태로 작성, 호출할 것.
   }, 12000);
-
-function start2(msg) {
-    if(x==0) {console.log(""); console.log("-----"); console.log(msg);}
-    x += 1;
-    console.log(x * x * x);
-}

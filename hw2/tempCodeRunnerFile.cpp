@@ -1,0 +1,2 @@
+
+            board[i] = new char[
